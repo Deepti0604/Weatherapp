@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="weastyle.css">
+    <script src="https://kit.fontawesome.com/255269bd13.js" crossorigin="anonymous"></script>
+    <title>weather website</title>
+</head>
+<body>
+    <div class="viewport">
+        <div class="display">
+            <div class="side_bar">
+                <div class="side_bar1">
+                    <h3>Weather</h3>
+                    <h4>Report</h2>
+                </div>
+                <div class="side_bar2">
+                    <i class="fa-solid fa-cloud-sun-rain"></i>
+                    <h4>Haze  11°C</h4>
+                </div>
+            </div>
+            <div class="search_bar">
+                <input type="text" placeholder="Enter the place name" spellcheck="false">
+                <button><i class="fa-solid fa-magnifying-glass"></i></i></button>
+            </div>
+            <div class="forecast">
+                <img src="clear.png" class="weather_icon">
+                <h1 class="temp">22°C</h1>
+                <h2 class="city">Bhopal</h2>
+                <div class="details">
+                    <div class="sections">
+                        <i class="fa-solid fa-droplet-slash"></i>
+                        <div>
+                            <p class="humid">50</p><p>%</p> <br>
+                            <p>Humidity</p>
+                        </div>
+                    </div>
+                    <div class="sections">
+                        <i class="fa-solid fa-wind"></i>
+                        <div>
+                            <p class="wind">15 </p><p>km/hr</p> <br>
+                            <p>Wind Speed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const apiKey = "553b12fcccdd2ac14d61ef892b076272";
+        const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+        const searchBox = document.querySelector(".search_bar input");
+        const searchBtn = document.querySelector(".search_bar button");
+        const weatherIcon = document.querySelector(".weather_icon")
+        async function checkWeather(city) {
+            const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+            var data = await response.json();
+
+           
+            document.querySelector(".city").innerHTML = data.name;
+            document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
+            document.querySelector(".humid").innerHTML = data.main.humidity;
+            document.querySelector(".wind").innerHTML = data.wind.speed;
+
+            if(data.weather[0].main == "Clouds"){
+                weatherIcon.src = "cloud.png";
+            }
+            else if(data.weather[0].main == "Clear"){
+                weatherIcon.src = "clear.png";
+            }
+            else if(data.weather[0].main == "Rain"){
+                weatherIcon.src = "rain.png";
+            }
+            else if(data.weather[0].main == "Drizzle"){
+                weatherIcon.src = "drizzle.png";
+            }
+            else if(data.weather[0].main == "Snow"){
+                weatherIcon.src = "snow.png";
+            }
+            document.querySelector(".forecast").style.display = "block";
+            document.querySelector(".side_bar").style.display = "none";
+        }
+        searchBtn.addEventListener("click", ()=>{
+            checkWeather(searchBox.value);
+        })
+        checkWeather();
+
+    </script>
+</body>
+</html>
